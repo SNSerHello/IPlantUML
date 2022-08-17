@@ -1,5 +1,5 @@
-include *.rst *.txt LICENSE tox.ini .travis.yml docs/Makefile .coveragerc conftest.py
-recursive-include tests *.py
-recursive-include docs *.rst
-recursive-include docs *.py
-prune docs/_build
+# include *.md *.txt LICENSE tox.ini .travis.yml docs/Makefile .coveragerc conftest.py
+# recursive-include tests *.py
+# recursive-include docs *.md
+# recursive-include docs *.py
+# prune docs/_build
