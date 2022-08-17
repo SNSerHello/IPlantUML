@@ -9,7 +9,7 @@ import fileinput
 
 ###############################################################################
 
-NAME = 'IPlantUML'
+NAME = "IPlantUML"
 
 PACKAGES = find_packages(where=".")
 
@@ -18,29 +18,29 @@ META_PATH = os.path.join("iplantuml", "__init__.py")
 KEYWORDS = ["jupyter", "ipython", "uml", "plantuml"]
 
 CLASSIFIERS = [
-        "Development Status :: 3 - Alpha",
-        "Framework :: IPython",
-        "Intended Audience :: Science/Research",
-        "Natural Language :: English",
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.6",
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.3",
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: Implementation :: CPython",
-        "Programming Language :: Python :: Implementation :: PyPy",
-        "Topic :: Software Development :: Libraries :: Python Modules",
+    "Development Status :: 3 - Alpha",
+    "Framework :: IPython",
+    "Intended Audience :: Science/Research",
+    "Natural Language :: English",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 2",
+    "Programming Language :: Python :: 2.6",
+    "Programming Language :: Python :: 2.7",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.3",
+    "Programming Language :: Python :: 3.4",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 
-INSTALL_REQUIRES = ['plantweb']
+INSTALL_REQUIRES = ["plantweb"]
 
 ###############################################################################
 
@@ -62,24 +62,23 @@ META_VARS = dict(META_VARS_RE.findall(META_FILE))
 
 
 def search_and_replace(jarpath):
-    filename = os.path.join('iplantuml', '__init__.py')
+    filename = os.path.join("iplantuml", "__init__.py")
 
     # rewrite __init__.py in place modifying the PLANTUMLPATH on the go.
     f = fileinput.FileInput(filename, inplace=True)
 
     for line in f:
-        if line[:12] == 'PLANTUMLPATH':
-            print('PLANTUMLPATH = \'{}\''.format(jarpath))
+        if line[:12] == "PLANTUMLPATH":
+            print("PLANTUMLPATH = '{}'".format(jarpath))
         else:
             # suppress endline with end='', line already has one
-            print(line, end='')
+            print(line, end="")
 
     f.close()
 
 
 class InstallCommand(_install):
-    user_options = (_install.user_options +
-                    [('jarpath=', None, 'path of plantuml.jar')])
+    user_options = _install.user_options + [("jarpath=", None, "path of plantuml.jar")]
 
     def initialize_options(self):
         _install.initialize_options(self)
@@ -97,7 +96,7 @@ class InstallCommand(_install):
 if __name__ == "__main__":
     setup(
         name=NAME,
-        entry_points={'console_scripts': ['nbmerge = nbmerge:main']},
+        entry_points={"console_scripts": ["nbmerge = nbmerge:main"]},
         description=META_VARS["description"],
         license=META_VARS["license"],
         url=META_VARS["uri"],
@@ -113,5 +112,5 @@ if __name__ == "__main__":
         zip_safe=False,
         classifiers=CLASSIFIERS,
         install_requires=INSTALL_REQUIRES,
-        cmdclass={'install': InstallCommand},
+        cmdclass={"install": InstallCommand},
     )

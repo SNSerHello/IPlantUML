@@ -25,7 +25,7 @@ __email__ = "jbn@abreka.com"
 # resource intensivel. Web requests are better. You don't need Java anymore.
 ###############################################################################
 
-PLANTUMLPATH = '/usr/local/bin/plantuml.jar'
+PLANTUMLPATH = "/usr/local/bin/plantuml.jar"
 
 
 def _exec_and_get_paths(cmd, file_names):
@@ -43,12 +43,9 @@ def plantuml_exec(*file_names, **kwargs):
         jar file resides.
     :return: the path to the generated SVG UML diagram.
     """
-    plantuml_path = kwargs.get('plantuml_path', PLANTUMLPATH)
+    plantuml_path = kwargs.get("plantuml_path", PLANTUMLPATH)
 
-    cmd = ["java",
-           "-splash:no",
-           "-jar", plantuml_path,
-           "-tsvg"] + list(file_names)
+    cmd = ["java", "-splash:no", "-jar", plantuml_path, "-tsvg"] + list(file_names)
 
     return _exec_and_get_paths(cmd, file_names)
 
@@ -61,9 +58,7 @@ def plantuml_web(*file_names, **kwargs):
     :param file_names: the filenames of the documents for parsing by PlantUML.
     :return: the path to the generated SVG UML diagram.
     """
-    cmd = ["plantweb",
-           "--format",
-           "auto"] + list(file_names)
+    cmd = ["plantweb", "--format", "auto"] + list(file_names)
 
     return _exec_and_get_paths(cmd, file_names)
 
@@ -80,19 +75,32 @@ def plantuml(line, cell):
     """
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-j", "--jar", action="store_true",
-                        help="render using plantuml.jar (default is plantweb)")
-    parser.add_argument("-n", "--name", type=str, default=None,
-                        help="persist as <name>.uml and <name>.svg after rendering")
-    parser.add_argument("-p", "--plantuml-path", default=None,
-                        help="specify PlantUML jar path (default={})".format(PLANTUMLPATH))
+    parser.add_argument(
+        "-j",
+        "--jar",
+        action="store_true",
+        help="render using plantuml.jar (default is plantweb)",
+    )
+    parser.add_argument(
+        "-n",
+        "--name",
+        type=str,
+        default="plantuml_output",
+        help="persist as <name>.uml and <name>.svg after rendering",
+    )
+    parser.add_argument(
+        "-p",
+        "--plantuml-path",
+        default=PLANTUMLPATH,
+        help="specify PlantUML jar path (default={})".format(PLANTUMLPATH),
+    )
     args = parser.parse_args(line.split() if line else "")
     retain = args.name is not None
     base_name = args.name or str(uuid.uuid4())
     use_web = not (args.jar or args.plantuml_path)
 
     uml_path = base_name + ".uml"
-    with open(uml_path, 'w') as fp:
+    with open(uml_path, "w") as fp:
         fp.write(cell)
 
     try:
@@ -100,8 +108,12 @@ def plantuml(line, cell):
         if use_web:
             output = plantuml_web(uml_path)
         else:
-            plantuml_path = os.path.abspath(args.plantuml_path or PLANTUMLPATH)
-            output = plantuml_exec(uml_path, plantuml_path=plantuml_path)
+            try:
+                plantuml_path = os.path.abspath(args.plantuml_path or PLANTUMLPATH)
+                output = plantuml_exec(uml_path, plantuml_path=plantuml_path)
+            except Exception as e:
+                print("{}, and trying to use plantweb.".format(str(e)))
+                output = plantuml_web(uml_path)
         svg_name = output[0]
         return SVG(filename=svg_name)
     finally:
