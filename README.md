@@ -1,5 +1,13 @@
 ![status](https://travis-ci.org/jbn/IPlantUML.svg?branch=master)
 
+# IPlantUML
+
+## Build wheel
+
+```bash
+python setup.py bdist_wheel --universal
+```
+
 ## What is it?
 
 This Python package defines a [PlantUML](http://plantuml.com) cell magic for IPython. It lets you generate UML diagrams as inline SVG in your notebook. I'll add embellishments as needed. But, for now, I just needed something that worked and existed as a package (in pypi).
